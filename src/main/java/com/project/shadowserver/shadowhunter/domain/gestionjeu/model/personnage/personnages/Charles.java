@@ -1,17 +1,19 @@
-package com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.vampire;
+package com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.personnages;
 
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.Partie;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.CartePersonnageAbstract;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.PersonnageEnum;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.RoleEnum;
+import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.pouvoir.CharlesPouvoir;
+import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.pouvoir.VampirePouvoir;
 
-public class VampireCartePersonnage extends CartePersonnageAbstract {
+public class Charles extends CartePersonnageAbstract {
 
-    public VampireCartePersonnage() {
-        this.setPersonnageEnum(PersonnageEnum.VAMPIRE);
-        this.setNombreDePointDeVie(13);
-        this.setRole(RoleEnum.SHADOW);
-        this.setPouvoir(new VampirePouvoir());
+    public Charles() {
+        this.setPersonnageEnum(PersonnageEnum.CHARLES);
+        this.setNombreDePointDeVie(11);
+        this.setRole(RoleEnum.NEUTRE);
+        this.setPouvoir(new CharlesPouvoir());
     }
 
     @Override

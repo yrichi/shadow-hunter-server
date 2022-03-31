@@ -7,7 +7,7 @@ public enum PersonnageEnum {
     DANIEL,
     EMI,
     FRANKLIN,
-    GAROU,
+    LOUP_GAROU,
     GEORGES,
     METAMORPHE,
     VAMPIRE

@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 public class CartesFactory {
 
-    static List<AbstractCarte> getCartes(TypeCarteEnum typeCarteEnum) {
+    public static List<AbstractCarte> getCartes(TypeCarteEnum typeCarteEnum) {
         return NomCarteEnum.getCartes(typeCarteEnum).stream().map(CarteFactory::getCarte).collect(Collectors.toList());
     }
 

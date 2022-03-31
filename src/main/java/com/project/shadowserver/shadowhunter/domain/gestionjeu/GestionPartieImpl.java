@@ -39,38 +39,8 @@ public class GestionPartieImpl implements GestionPartie {
 
     private Partie initPartie(int nbJoueur) {
         Partie partie = new Partie();
-        partie.setJoueurs(initJoueurs(nbJoueur));
-        partie.setCarteLumiere(initCarte(TypeCarteEnum.LUMIERE));
-        partie.setCarteShadows(initCarte(TypeCarteEnum.TENEBRE));
-        partie.setCarteVision(initCarte(TypeCarteEnum.VISION));
-        partie.setTerrains(initTerrain());
+       partie.initPartie(nbJoueur);
         return partie;
-    }
-
-    private List<TerrainAbstract> initTerrain() {
-        return Arrays.stream(TerrainEnum.values()).map(CarteTerrainFactory::getTerrain).collect(Collectors.toList());
-    }
-
-    private List<AbstractCarte> initCarte(TypeCarteEnum typeCarte) {
-        switch (typeCarte){
-            case TENEBRE:
-                return null;
-        }
-        return null;
-    }
-
-    private List<Joueur> initJoueurs(int nbJoueur) {
-        List<Joueur> joueurs = new ArrayList<>();
-        List<PersonnageEnum> roles = Arrays.asList(PersonnageEnum.values());
-        // TODO random la liste de roles
-        for (int i = 0; i < nbJoueur; i++) {
-            joueurs.add(initJoueurByPersonnage(roles.get(i)));
-        }
-        return joueurs;
-    }
-
-    private Joueur initJoueurByPersonnage(PersonnageEnum personnageEnum) {
-        return Joueur.builder().cartePersonnage(CartePersonnageFactory.initPersonnage(personnageEnum)).build();
     }
 
 }

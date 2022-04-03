@@ -38,5 +38,4 @@ public class GestionJeuController implements GestionJeuServiceApi {
         return gestionPartie.creerPartie(joueurId, nbJoueur);
     }
 
-
 }

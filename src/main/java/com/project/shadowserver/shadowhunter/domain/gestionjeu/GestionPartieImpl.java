@@ -3,13 +3,17 @@ package com.project.shadowserver.shadowhunter.domain.gestionjeu;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.Partie;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.action.ActionAbstract;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.option.Option;
+import com.project.shadowserver.shadowhunter.domain.gestionjeu.provider.PartieProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class GestionPartieImpl implements GestionPartie {
 
+    private final PartieProvider partieProvider;
 
 
     @Override

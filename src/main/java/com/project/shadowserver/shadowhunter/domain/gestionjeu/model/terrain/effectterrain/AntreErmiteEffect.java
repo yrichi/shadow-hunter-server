@@ -8,6 +8,7 @@ public class AntreErmiteEffect extends EffetTerrainAbstract {
 
     @Override
     public Notification useEffect(PersonnageEnum emeteur, PersonnageEnum recepteur, Partie partie) {
+
         return null;
     }
 }

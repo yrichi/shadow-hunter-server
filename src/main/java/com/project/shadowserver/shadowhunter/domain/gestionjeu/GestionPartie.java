@@ -14,8 +14,6 @@ public interface GestionPartie {
 
     void  applyAction(String idPartie, String idJoueur, ActionAbstract actionAbstract);
 
-    Partie getUpdatedPartie(PersonnageEnum personnageEnum);
 
-
-
+    Partie getUpdatedPartie(String idPartie, String joueurId);
 }

@@ -30,9 +30,10 @@ public class GestionPartieImpl implements GestionPartie {
     }
 
     @Override
-    public Partie getUpdatedPartie(PersonnageEnum personnageEnum) {
+    public Partie getUpdatedPartie(String idPartie, String joueurId) {
         return null;
     }
+
 
     private Partie initPartie(int nbJoueur) {
         Partie partie = new Partie();

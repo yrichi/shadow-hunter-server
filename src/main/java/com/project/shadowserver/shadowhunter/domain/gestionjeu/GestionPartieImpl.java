@@ -3,7 +3,6 @@ package com.project.shadowserver.shadowhunter.domain.gestionjeu;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.Partie;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.action.ActionAbstract;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.option.Option;
-import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.PersonnageEnum;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +13,7 @@ public class GestionPartieImpl implements GestionPartie {
 
 
     @Override
-    public Partie creerPartie(int nbJoueur) {
+    public Partie creerPartie(String idJoueur, int nbJoueur) {
         Partie partie = initPartie(nbJoueur);
         return partie;
     }

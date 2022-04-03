@@ -30,7 +30,12 @@ public class GestionJeuController implements GestionJeuServiceApi {
 
     @Override
     public Partie getPartie(String idPartie, String joueurId) {
-        return gestionPartie.getUpdatedPartie(idPartie,  joueurId);
+        return gestionPartie.getUpdatedPartie(idPartie, joueurId);
+    }
+
+    @Override
+    public Partie createPartie(String joueurId, int nbJoueur) {
+        return gestionPartie.creerPartie(joueurId, nbJoueur);
     }
 
 

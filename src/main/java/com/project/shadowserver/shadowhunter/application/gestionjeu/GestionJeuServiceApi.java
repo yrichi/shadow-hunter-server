@@ -12,7 +12,7 @@ import java.util.List;
 public interface GestionJeuServiceApi {
 
     @GetMapping("{idPartie}/options")
-    List<OptionPresentation> getOption(@PathVariable String idPartie,@RequestParam String joueurId);
+    List<OptionPresentation> getOption(@PathVariable String idPartie, @RequestParam String joueurId);
 
     @PostMapping("{idPartie}/{joueurId}/action")
     void action(@PathVariable String joueurId, @PathVariable String idPartie, @RequestBody ActionPresentation actionPresentation);
@@ -20,4 +20,6 @@ public interface GestionJeuServiceApi {
     @GetMapping("/partie/{idPartie}")
     Partie getPartie(@PathVariable String idPartie, @RequestParam String joueurId);
 
+    @PostMapping("partie")
+    Partie createPartie(@RequestParam String joueurId, @RequestParam int nbJoueur);
 }

@@ -10,10 +10,11 @@ import java.util.List;
 @RequestMapping("/gestion-jeu")
 public interface GestionJeuServiceApi {
 
-    @GetMapping("{joueurId}/options")
-    List<OptionPresentation> getOption(@PathVariable String joueurId);
+    @GetMapping("{idPartie}/{joueurId}/options")
+    List<OptionPresentation> getOption(@PathVariable String idPartie,@PathVariable String joueurId);
 
-    @PostMapping("{joueurId}/action")
-    void action(@PathVariable String joueurId, @RequestBody ActionPresentation actionPresentation);
+    @PostMapping("{idPartie}/{joueurId}/action")
+    void action(@PathVariable String joueurId, @PathVariable String idPartie, @RequestBody ActionPresentation actionPresentation);
+
 
 }

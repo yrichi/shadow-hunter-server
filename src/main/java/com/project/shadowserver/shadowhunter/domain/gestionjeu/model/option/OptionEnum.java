@@ -9,13 +9,12 @@ public enum OptionEnum {
 
     SE_REVELER("Se reveler"),
 
-
-
     PAS_SE_REVELER("Ne pas se reveler"),
 
     CHOISIR_JOUEUR("choisir un joueur"),
 
     SUBIR_BLESSURE("Subir une blessure"),
+
     DONNER_CARTE_EQUIPEMENT("donner une carte equipement");
 
     public String getLabel() {

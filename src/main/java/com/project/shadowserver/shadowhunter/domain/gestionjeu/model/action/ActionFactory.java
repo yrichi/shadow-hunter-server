@@ -9,7 +9,7 @@ import lombok.Data;
 public abstract class ActionFactory {
 
 
-    ActionAbstract buildAction(TerrainEnum terrainCible, PersonnageEnum emeteur, PersonnageEnum cible, TypeAction typeAction, OptionEnum option) {
+    public static ActionAbstract buildAction(TerrainEnum terrainCible, PersonnageEnum emeteur, PersonnageEnum cible, TypeAction typeAction, OptionEnum option) {
 
         switch (option) {
             case ATTAQUER:

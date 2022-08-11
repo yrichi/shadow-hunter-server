@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 public class Option {
-    OptionEnum optionEnum;
-    Boolean isRequired = false;
-    TypeDesEnum typeDes = null;
+    private OptionEnum optionEnum;
+    private Boolean isRequired = false;
+    private TypeCibleEnum typeCible;
 }

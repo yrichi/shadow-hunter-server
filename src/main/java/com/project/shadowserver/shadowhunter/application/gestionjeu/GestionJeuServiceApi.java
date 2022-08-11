@@ -1,7 +1,7 @@
 package com.project.shadowserver.shadowhunter.application.gestionjeu;
 
-import com.project.shadowserver.shadowhunter.application.gestionjeu.presentation.ActionPresentation;
-import com.project.shadowserver.shadowhunter.application.gestionjeu.presentation.OptionPresentation;
+import com.project.shadowserver.shadowhunter.application.gestionjeu.presentation.in.ActionPresentation;
+import com.project.shadowserver.shadowhunter.application.gestionjeu.presentation.out.OptionPresentation;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.Partie;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,7 +1,7 @@
 package com.project.shadowserver.shadowhunter.application.gestionjeu;
 
-import com.project.shadowserver.shadowhunter.application.gestionjeu.presentation.ActionPresentation;
-import com.project.shadowserver.shadowhunter.application.gestionjeu.presentation.OptionPresentation;
+import com.project.shadowserver.shadowhunter.application.gestionjeu.presentation.in.ActionPresentation;
+import com.project.shadowserver.shadowhunter.application.gestionjeu.presentation.out.OptionPresentation;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.GestionPartie;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.Partie;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +18,7 @@ public class GestionJeuController implements GestionJeuServiceApi {
 
     @Override
     public List<OptionPresentation> getOption(String joueurId, String idPartie) {
-        return gestionPartie.getOptionJoueurs(idPartie, joueurId).stream().map((option) ->
-                new OptionPresentation(option.getOptionEnum(), option.getIsRequired(), option.getTypeDes())).
+        return gestionPartie.getOptionJoueurs(idPartie, joueurId).stream().map(OptionPresentation::new).
                 collect(Collectors.toList());
     }
 
@@ -30,12 +29,12 @@ public class GestionJeuController implements GestionJeuServiceApi {
 
     @Override
     public Partie getPartie(String idPartie, String joueurId) {
-        return gestionPartie.getUpdatedPartie(idPartie, joueurId);
+        return gestionPartie.getPartie(idPartie, joueurId);
     }
 
     @Override
     public Partie createPartie(String joueurId, int nbJoueur) {
-        return gestionPartie.creerPartie(joueurId, nbJoueur);
+        return gestionPartie.creerPartie(joueurId);
     }
 
 }

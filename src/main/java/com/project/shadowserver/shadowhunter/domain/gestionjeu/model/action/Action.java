@@ -6,8 +6,11 @@ import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.carte.TypeC
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.option.OptionEnum;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.terrain.TerrainEnum;
 import lombok.Data;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 
 @Data
+@Log4j2
 public class Action {
     TerrainEnum terrainCible;
     String idJoueurEmeteur;
@@ -65,8 +68,8 @@ public class Action {
             case CHOISIR_CARTE_TENEBRE:
                 partie.choisirCarte(idJoueurEmeteur, TypeCarteEnum.TENEBRE);
                 break;
-            case VOLER_EQUIPEMENT:
-                break;
+            default:
+                log.debug("aucune option trouvé !");
         }
     };
 

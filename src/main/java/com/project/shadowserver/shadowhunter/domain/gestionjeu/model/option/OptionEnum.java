@@ -22,13 +22,10 @@ public enum OptionEnum {
     SUBIR_BLESSURE_FORET_HANTE("Subir deux blessures"),
     DONNER_CARTE_EQUIPEMENT("donner une carte equipement"),
 
-    VOLER_CARTE_EQUIPEMENT("donner une carte equipement"),
+    VOLER_CARTE_EQUIPEMENT("voler une carte equipement"),
     CHOISIR_CARTE_VISION("Choisir carte vision"),
     CHOISIR_CARTE_BLANCHE("Choisir carte blanche"),
-    CHOISIR_CARTE_TENEBRE("Choisir carte tenebre"),
-
-    // BOB
-    VOLER_EQUIPEMENT("voler un equipement");
+    CHOISIR_CARTE_TENEBRE("Choisir carte tenebre");
 
     private final String label;
 

@@ -72,12 +72,16 @@ public class Joueur {
 
     }
 
-    private boolean isEquipmentExist(NomCarteEnum carte) {
+    public boolean isEquipmentExist(NomCarteEnum carte) {
         return equipements.stream().anyMatch(abstractCarte -> abstractCarte.getNomCarteEnum().equals(carte));
     }
 
     public void ajouterEquipement(AbstractCarte carte) {
         carte.setIdJoueurOwner(idUtilisateur);
         equipements.add(carte);
+    }
+
+    public void removeEquipement(NomCarteEnum carteCible) {
+        equipements = equipements.stream().filter(abstractCarte -> !abstractCarte.getNomCarteEnum().equals(carteCible)).collect(Collectors.toList());
     }
 }

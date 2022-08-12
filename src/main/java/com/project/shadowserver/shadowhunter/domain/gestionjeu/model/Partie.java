@@ -99,8 +99,33 @@ public class Partie {
         // TODO si il a deja la carte ange gardien alors elle doit etre defaussé
     }
 
+    public void nextJoueurEnCours() {
+        var indexJoueurActuel = findIndexJoueurActuel();
+
+        var joueurActuel = joueurs.get(indexJoueurActuel);
+        joueurActuel.initOptionsNewTurn();
+        if (joueurActuel.isEquipmentExist(NomCarteEnum.ANGE_GARDIEN)){
+            joueurActuel.removeEquipement(NomCarteEnum.ANGE_GARDIEN);
+        }
+    }
+
+    private int findIndexJoueurActuel() {
+        for (int i = 0; i < joueurs.size(); i++) {
+            if (Objects.equals(joueurs.get(i).getIdUtilisateur(), idJoueurActuel)) {
+                return i < i ? i : 0;
+            }
+        }
+        log.debug("ne trouve pas l'index du joueur actuel");
+        return 0;
+    };
+
     public void applyAction(Action action) {
         action.apply(this);
+        updateOptionsJoueur();
+    }
+
+    private void updateOptionsJoueur() {
+
     }
 
     public void deplacement(String idJoueurEmeteur) {
@@ -168,8 +193,8 @@ public class Partie {
 
     public void subirBlessureForetHante(String idJoueurEmeteur, String idJoueurCible) {
         var joueurCible = getJoueur(idJoueurCible);
-        if (joueurCible.isNotVunerableForetHante()){
-            joueurCible.getNotifications().add(NotificationFactory.buildNotification(TypeNotificationEnum.ATTAQUE,idJoueurCible,String.format("le joueur %s n'est pas sensible à l'attaque",joueurCible.getCartePersonnage().getPersonnageEnum())));
+        if (joueurCible.isNotVunerableForetHante()) {
+            joueurCible.getNotifications().add(NotificationFactory.buildNotification(TypeNotificationEnum.ATTAQUE, idJoueurCible, String.format("le joueur %s n'est pas sensible à l'attaque", joueurCible.getCartePersonnage().getPersonnageEnum())));
         } else {
             joueurCible.blesse(2);
         }
@@ -183,25 +208,25 @@ public class Partie {
     public void donnerEquipement(String idJoueurEmeteur, String idJoueurCible, NomCarteEnum carteCible) {
         var joueurEmeteur = getJoueur(idJoueurEmeteur);
         var joueurCible = getJoueur(idJoueurCible);
-        joueurEmeteur.transfertCarteEquipement(joueurCible,carteCible);
+        joueurEmeteur.transfertCarteEquipement(joueurCible, carteCible);
     }
 
     public void volerEquipement(String idJoueurEmeteur, String idJoueurCible, NomCarteEnum carteCible) {
         var joueurEmeteur = getJoueur(idJoueurEmeteur);
         var joueurCible = getJoueur(idJoueurCible);
-        joueurCible.transfertCarteEquipement(joueurEmeteur,carteCible);
+        joueurCible.transfertCarteEquipement(joueurEmeteur, carteCible);
     }
 
     public void choisirCarte(String idJoueurEmeteur, TypeCarteEnum typeCarte) {
         var joueurEmeteur = getJoueur(idJoueurEmeteur);
-        if (TypeCarteEnum.VISION.equals(typeCarte)){
+        if (TypeCarteEnum.VISION.equals(typeCarte)) {
             var carte = tirerCarte(typeCarte);
             joueurEmeteur.ajouterEquipement(carte);
         }
     }
 
     private AbstractCarte tirerCarte(TypeCarteEnum typeCarte) {
-        switch (typeCarte){
+        switch (typeCarte) {
             case VISION:
                 return carteVision.stream().filter(abstractCarte -> !BooleanUtils.toBoolean(abstractCarte.getIsDefausse())).findAny().orElse(null);
             case LUMIERE:
@@ -209,9 +234,11 @@ public class Partie {
             case TENEBRE:
                 return getCarteShadows().stream().filter(abstractCarte -> !BooleanUtils.toBoolean(abstractCarte.getIsDefausse())).findAny().orElse(null);
             default:
-                log.debug("impossible de tirer une carte ",typeCarte);
+                log.debug("impossible de tirer une carte ", typeCarte);
                 return null;
 
         }
-    };
+    }
+
+    ;
 }

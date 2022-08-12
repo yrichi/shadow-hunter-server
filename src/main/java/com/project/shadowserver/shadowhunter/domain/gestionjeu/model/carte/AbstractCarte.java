@@ -15,7 +15,6 @@ public abstract class AbstractCarte {
     private TypeEquipementAbstract typeEquipement;
     private NomCarteEnum nomCarteEnum;
     private Boolean isDefausse;
-    private String idJoueurOwner;
     private List<PersonnageEnum> authorizedPersonnages;
     private List<Option> options;
     private Boolean used;

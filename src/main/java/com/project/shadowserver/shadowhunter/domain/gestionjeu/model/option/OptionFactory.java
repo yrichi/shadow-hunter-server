@@ -22,10 +22,10 @@ public abstract class OptionFactory {
                 return new Option(OptionEnum.CHOISIR_JOUEUR, false,TypeCibleEnum.JOUEUR);
             case SUBIR_BLESSURE:
                 return new Option(OptionEnum.SUBIR_BLESSURE, false,TypeCibleEnum.JOUEUR);
-            case SUBIR_DEUX_BLESSURE:
-                return new Option(OptionEnum.SUBIR_DEUX_BLESSURE, false,TypeCibleEnum.JOUEUR);
-                case SOIGNER_BLESSURE:
-                return new Option(OptionEnum.SOIGNER_BLESSURE, false,TypeCibleEnum.SOI_MEME);
+            case SUBIR_BLESSURE_FORET_HANTE:
+                return new Option(OptionEnum.SUBIR_BLESSURE_FORET_HANTE, false,TypeCibleEnum.JOUEUR);
+                case SOIGNER_BLESSURE_FORET_HANTE:
+                return new Option(OptionEnum.SOIGNER_BLESSURE_FORET_HANTE, false,TypeCibleEnum.SOI_MEME);
             case DONNER_CARTE_EQUIPEMENT:
                 return new Option(OptionEnum.DONNER_CARTE_EQUIPEMENT, false,TypeCibleEnum.JOUEUR);
             case CHOISIR_CARTE_VISION:

@@ -1,5 +1,6 @@
 package com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.personnages;
 
+import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.Joueur;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.Partie;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.CartePersonnageAbstract;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.PersonnageEnum;
@@ -16,7 +17,7 @@ public class LoupGarou extends CartePersonnageAbstract {
     }
 
     @Override
-    public String usePower(PersonnageEnum personnageEmeteur, Partie partie, PersonnageEnum personnageRecepteur) {
+    public String usePower(Joueur joueurEmeteur, Joueur joueurCible, Partie partie) {
         // TODO
         return "";
     }

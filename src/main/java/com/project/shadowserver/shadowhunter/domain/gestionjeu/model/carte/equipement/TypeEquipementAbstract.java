@@ -15,11 +15,11 @@ public abstract class TypeEquipementAbstract {
 
     public abstract String getNotification();
 
-    public int getDammagesEmitted(int nbDammage) {
+    public int getDamagesEmitted(int nbDammage) {
         return nbDammage;
     }
 
-    public int getDammagesReceived(int nbDammage) {
+    public int getDamagesReceived(int nbDammage) {
         return nbDammage;
     }
 

@@ -14,12 +14,12 @@ public class TogeSainteEquipement extends TypeEquipementAbstract {
     }
 
     @Override
-    public int getDammagesEmitted(int nbDammage) {
+    public int getDamagesEmitted(int nbDammage) {
         return super.decreaseDamage(nbDammage);
     }
 
     @Override
-    public int getDammagesReceived(int nbDammage) {
+    public int getDamagesReceived(int nbDammage) {
         return nbDammage > 0 ? nbDammage - 1 : 0;
     }
 }

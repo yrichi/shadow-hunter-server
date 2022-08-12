@@ -1,10 +1,10 @@
 package com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.personnages;
 
+import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.Joueur;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.Partie;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.CartePersonnageAbstract;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.PersonnageEnum;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.RoleEnum;
-import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.pouvoir.FranklinPouvoir;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.pouvoir.GeorgesPouvoir;
 
 public class George extends CartePersonnageAbstract {
@@ -17,7 +17,7 @@ public class George extends CartePersonnageAbstract {
     }
 
     @Override
-    public String usePower(PersonnageEnum personnageEmeteur, Partie partie, PersonnageEnum personnageRecepteur) {
+    public String usePower(Joueur joueurEmeteur, Joueur joueurCible, Partie partie) {
         // TODO
         return "";
     }

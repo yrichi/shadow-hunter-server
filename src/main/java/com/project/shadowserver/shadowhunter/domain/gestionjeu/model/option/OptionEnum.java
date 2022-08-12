@@ -18,8 +18,8 @@ public enum OptionEnum {
     UTILISER_POUVOIR("utiliser pouvoir personnage"),
     CHOISIR_JOUEUR("choisir un joueur"),
     SUBIR_BLESSURE("Subir une blessure"),
-    SOIGNER_BLESSURE("Soigner une blessure"),
-    SUBIR_DEUX_BLESSURE("Subir deux blessures"),
+    SOIGNER_BLESSURE_FORET_HANTE("Soigner une blessure"),
+    SUBIR_BLESSURE_FORET_HANTE("Subir deux blessures"),
     DONNER_CARTE_EQUIPEMENT("donner une carte equipement"),
 
     VOLER_CARTE_EQUIPEMENT("donner une carte equipement"),

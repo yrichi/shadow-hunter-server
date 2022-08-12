@@ -7,7 +7,7 @@ public class HacheTueuseEquipement extends TypeEquipementAbstract {
     }
 
     @Override
-    public int getDammagesEmitted(int nbDammage) {
+    public int getDamagesEmitted(int nbDammage) {
         return super.increaseDamage(nbDammage);
     }
 

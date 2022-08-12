@@ -11,8 +11,8 @@ import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.terrain.Ter
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.terrain.TerrainEnum;
 import com.project.shadowserver.shadowhunter.domain.util.DiceRollUtil;
 import lombok.Data;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -41,6 +41,7 @@ public class Partie {
     public void initPartie(String idJoueur) {
         idJoueurCreateur = idJoueur;
         etatPartie = EtatPartie.EN_PREPARATION;
+        // TODO random a prevoir
         setCarteLumiere(CartesFactory.getCartes(TypeCarteEnum.LUMIERE));
         setCarteShadows(CartesFactory.getCartes(TypeCarteEnum.TENEBRE));
         setCarteVision(CartesFactory.getCartes(TypeCarteEnum.VISION));
@@ -83,18 +84,19 @@ public class Partie {
     }
 
     public List<OptionEnum> getOptions(String idJoueur) {
-        return getPersonnage(idJoueur).getOptions().stream().collect(Collectors.toList());
+        return getJoueur(idJoueur).getOptions().stream().collect(Collectors.toList());
     }
 
 
-    public Joueur getPersonnage(String idJoueur) {
+    public Joueur getJoueur(String idJoueur) {
         return getJoueurs().stream().filter(joueur -> Objects.equals(joueur.getIdUtilisateur(), idJoueur)).findAny().orElse(null);
     }
 
     public void setJoueurEnCours(String idJoueur) {
         idJoueurActuel = idJoueur;
-        var joueurActuel = getPersonnage(idJoueur);
+        var joueurActuel = getJoueur(idJoueur);
         joueurActuel.initOptionsNewTurn();
+        // TODO si il a deja la carte ange gardien alors elle doit etre defaussé
     }
 
     public void applyAction(Action action) {
@@ -103,7 +105,7 @@ public class Partie {
 
     public void deplacement(String idJoueurEmeteur) {
         int lancerDeDes = DiceRollUtil.diceRoll(TypeDesEnum.DOUBLE_DES_6);
-        Joueur personnage = getPersonnage(idJoueurEmeteur);
+        Joueur personnage = getJoueur(idJoueurEmeteur);
         if (lancerDeDes == 7) {
             personnage.getOptions().add(OptionEnum.DEPLACER_VERS_TERRAIN);
             personnage.getNotifications().add(
@@ -119,7 +121,7 @@ public class Partie {
     }
 
     public void deplacement(String idJoueurEmeteur, TerrainEnum terrain) {
-        Joueur personnage = getPersonnage(idJoueurEmeteur);
+        Joueur personnage = getJoueur(idJoueurEmeteur);
         if (terrain == null) {
             log.debug("terrain non trouvé pour le deplacement : erreur non prevu "); // TODO a delete
         }
@@ -132,7 +134,84 @@ public class Partie {
 
     }
 
-    public void attaquer(String idJoueurEmeteur, String idJoueurCible) {
+    public void attaquer(String idJoueurEmeteur, String idJoueurCible, TerrainEnum terrainCible) {
+        Joueur joueurEmeteur = getJoueur(idJoueurEmeteur);
+        Joueur joueurCible = getJoueur(idJoueurCible);
+        /* TODO a implementer
+        - la cible n'est pas invunerable (ange gardien 1 tours)
+- lancée de des
+- increase degat selon les equipements du joueur emeteur
+- decrease degat selon les equipements du joueurs cible
+- pouvoir de l'emeteur utilisable ( vampire,etc)
+- pouvoir de la cible utilisable ( loup garou )
 
+         */
     }
+
+    public void seReveler(String idJoueurEmeteur) {
+        Joueur personnage = getJoueur(idJoueurEmeteur);
+        personnage.getCartePersonnage().setHidden(false);
+    }
+
+    public void utiliserPouvoir(String idJoueurEmeteur, String idJoueurCible) {
+        Joueur joueurEmeteur = getJoueur(idJoueurEmeteur);
+        Joueur joueurCible = getJoueur(idJoueurCible);
+        joueurEmeteur.getCartePersonnage().getPouvoir().effetPouvoir(joueurEmeteur, joueurCible, this);
+    }
+
+    public void utiliserCarte(String idJoueurEmeteur, String idJoueurCible, NomCarteEnum carteUtilise) {
+        var joueurEmeteur = getJoueur(idJoueurEmeteur);
+        var joueurCible = getJoueur(idJoueurCible);
+        var carte = CarteFactory.getCarte(carteUtilise);
+        carte.effetCarte(joueurEmeteur, joueurCible, this);
+    }
+
+    public void subirBlessureForetHante(String idJoueurEmeteur, String idJoueurCible) {
+        var joueurCible = getJoueur(idJoueurCible);
+        if (joueurCible.isNotVunerableForetHante()){
+            joueurCible.getNotifications().add(NotificationFactory.buildNotification(TypeNotificationEnum.ATTAQUE,idJoueurCible,String.format("le joueur %s n'est pas sensible à l'attaque",joueurCible.getCartePersonnage().getPersonnageEnum())));
+        } else {
+            joueurCible.blesse(2);
+        }
+    }
+
+    public void soignerBlessureForetHante(String idJoueurEmeteur, String idJoueurCible) {
+        var joueurCible = getJoueur(idJoueurCible);
+        joueurCible.soigner(1);
+    }
+
+    public void donnerEquipement(String idJoueurEmeteur, String idJoueurCible, NomCarteEnum carteCible) {
+        var joueurEmeteur = getJoueur(idJoueurEmeteur);
+        var joueurCible = getJoueur(idJoueurCible);
+        joueurEmeteur.transfertCarteEquipement(joueurCible,carteCible);
+    }
+
+    public void volerEquipement(String idJoueurEmeteur, String idJoueurCible, NomCarteEnum carteCible) {
+        var joueurEmeteur = getJoueur(idJoueurEmeteur);
+        var joueurCible = getJoueur(idJoueurCible);
+        joueurCible.transfertCarteEquipement(joueurEmeteur,carteCible);
+    }
+
+    public void choisirCarte(String idJoueurEmeteur, TypeCarteEnum typeCarte) {
+        var joueurEmeteur = getJoueur(idJoueurEmeteur);
+        if (TypeCarteEnum.VISION.equals(typeCarte)){
+            var carte = tirerCarte(typeCarte);
+            joueurEmeteur.ajouterEquipement(carte);
+        }
+    }
+
+    private AbstractCarte tirerCarte(TypeCarteEnum typeCarte) {
+        switch (typeCarte){
+            case VISION:
+                return carteVision.stream().filter(abstractCarte -> !BooleanUtils.toBoolean(abstractCarte.getIsDefausse())).findAny().orElse(null);
+            case LUMIERE:
+                return carteLumiere.stream().filter(abstractCarte -> !BooleanUtils.toBoolean(abstractCarte.getIsDefausse())).findAny().orElse(null);
+            case TENEBRE:
+                return getCarteShadows().stream().filter(abstractCarte -> !BooleanUtils.toBoolean(abstractCarte.getIsDefausse())).findAny().orElse(null);
+            default:
+                log.debug("impossible de tirer une carte ",typeCarte);
+                return null;
+
+        }
+    };
 }

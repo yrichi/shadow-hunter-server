@@ -23,6 +23,8 @@ import java.util.stream.Collectors;
 public class Partie {
     public static final int NB_JOUEUR_MAX = 8;
     private String idPartie;
+
+    private String waitingIdPlayer;
     private EtatPartie etatPartie;
     private String idJoueurCreateur;
 

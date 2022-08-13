@@ -1,9 +1,12 @@
 package com.project.shadowserver.shadowhunter.domain.gestionjeu.model;
 
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.carte.*;
+import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.carte.equipement.TypeDesEnum;
+import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.carte.equipement.TypeEquipementEffectEnum;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.option.OptionEnum;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.CartePersonnageAbstract;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.terrain.TerrainEnum;
+import com.project.shadowserver.shadowhunter.domain.util.DiceRollUtil;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
@@ -77,11 +80,43 @@ public class Joueur {
     }
 
     public void ajouterEquipement(AbstractCarte carte) {
-        carte.setIdJoueurOwner(idUtilisateur);
         equipements.add(carte);
     }
 
     public void removeEquipement(NomCarteEnum carteCible) {
         equipements = equipements.stream().filter(abstractCarte -> !abstractCarte.getNomCarteEnum().equals(carteCible)).collect(Collectors.toList());
+    }
+
+    public void attaque( Joueur joueurCible) {
+        if (joueurCible.getIdUtilisateur().equals(getIdUtilisateur())){
+            // le joueur ne peux pas s'auto attaquer, meme avec la metraillette
+            return;
+        }
+        int lancesDeDes;
+        if (isEquipmentExist(NomCarteEnum.SABRE_MASAMURE)){
+            lancesDeDes = DiceRollUtil.diceRoll(TypeDesEnum.DES_4);
+        } else {
+            lancesDeDes = DiceRollUtil.diceRoll(TypeDesEnum.DOUBLE_DES_6);
+        }
+        int degatsInfligeBrut = equipements.stream().filter(abstractCarte -> abstractCarte.getTypeEquipement() != null && abstractCarte.getTypeEquipement().getTypeEquipementEffectEnum().contains(TypeEquipementEffectEnum.EFFET_ATTAQUE))
+                .map(abstractCarte -> abstractCarte.getTypeEquipement().getDamagesEmitted(lancesDeDes)).reduce(0,Integer::sum);
+        int degatRecu = joueurCible.degatRecu(degatsInfligeBrut);
+
+        manageCapaciteSpecial(degatRecu,joueurCible);
+
+        joueurCible.blesse(degatRecu);
+    }
+
+    private void manageCapaciteSpecial(int degatRecu, Joueur joueurCible) {
+        // TODO ajouter dans les personnages les options types vampire , si degat alors heal vampire
+
+
+        // TODO ajouter pour les personnages cible, les options type loup garou =>  si degat recu alors le loup garou peut attaquer
+    }
+
+    private int degatRecu(int lanceDes){
+        return equipements.stream().filter(abstractCarte -> abstractCarte.getTypeEquipement() != null && abstractCarte.getTypeEquipement().getTypeEquipementEffectEnum().contains(TypeEquipementEffectEnum.EFFET_DEFENSE))
+                .map(abstractCarte -> abstractCarte.getTypeEquipement().getDamagesReceived(lanceDes)).reduce(0,Integer::sum);
+
     }
 }

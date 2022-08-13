@@ -15,10 +15,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
@@ -104,7 +101,7 @@ public class Partie {
 
         var joueurActuel = joueurs.get(indexJoueurActuel);
         joueurActuel.initOptionsNewTurn();
-        if (joueurActuel.isEquipmentExist(NomCarteEnum.ANGE_GARDIEN)){
+        if (joueurActuel.isEquipmentExist(NomCarteEnum.ANGE_GARDIEN)) {
             joueurActuel.removeEquipement(NomCarteEnum.ANGE_GARDIEN);
         }
     }
@@ -117,7 +114,9 @@ public class Partie {
         }
         log.debug("ne trouve pas l'index du joueur actuel");
         return 0;
-    };
+    }
+
+    ;
 
     public void applyAction(Action action) {
         action.apply(this);
@@ -161,16 +160,33 @@ public class Partie {
 
     public void attaquer(String idJoueurEmeteur, String idJoueurCible, TerrainEnum terrainCible) {
         Joueur joueurEmeteur = getJoueur(idJoueurEmeteur);
+        if (joueurEmeteur.isEquipmentExist(NomCarteEnum.MITRAILLETTE_FUNESTE)) {
+            var joueursCible = findJoueursAdjacent(terrainCible);
+            joueursCible.forEach(joueur -> joueurEmeteur.attaque(joueur));
+        }
         Joueur joueurCible = getJoueur(idJoueurCible);
+        joueurEmeteur.attaque(joueurCible);
+
+
         /* TODO a implementer
-        - la cible n'est pas invunerable (ange gardien 1 tours)
-- lancée de des
-- increase degat selon les equipements du joueur emeteur
-- decrease degat selon les equipements du joueurs cible
-- pouvoir de l'emeteur utilisable ( vampire,etc)
-- pouvoir de la cible utilisable ( loup garou )
+    - lancée de des
+    - increase degat selon les equipements du joueur emeteur
+    - decrease degat selon les equipements du joueurs cible
+    - pouvoir de l'emeteur utilisable ( vampire,etc)
+    - pouvoir de la cible utilisable ( loup garou )
 
          */
+    }
+
+    private List<Joueur> findJoueursAdjacent(TerrainEnum terrainCible) {
+        for (int i = 0; i < terrains.size(); i++) {
+            if (terrains.get(i).getTerrainEnum().equals(terrainCible)) {
+                int indexTerrainAdjacent = i % 2 == 0 ? i + 1 : i-1;
+                var terrainAdjecent = terrains.get(indexTerrainAdjacent);
+                return joueurs.stream().filter(joueur -> List.of(terrainCible,terrainAdjecent).contains(joueur.getPositionTerrain())).collect(Collectors.toList());
+            }
+        }
+        return Collections.emptyList();
     }
 
     public void seReveler(String idJoueurEmeteur) {

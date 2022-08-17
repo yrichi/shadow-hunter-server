@@ -3,7 +3,9 @@ package com.project.shadowserver.shadowhunter.domain.gestionjeu.model;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.carte.*;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.carte.equipement.TypeDesEnum;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.carte.equipement.TypeEquipementEffectEnum;
+import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.option.Option;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.option.OptionEnum;
+import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.option.OptionFactory;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.CartePersonnageAbstract;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.terrain.TerrainEnum;
 import com.project.shadowserver.shadowhunter.domain.util.DiceRollUtil;
@@ -25,8 +27,7 @@ public class Joueur {
     private String idUtilisateur;
     private CartePersonnageAbstract cartePersonnage;
     private TerrainEnum positionTerrain;
-    private boolean standby;
-    private Set<OptionEnum> options = new HashSet<>();
+    private List<Option> options = new ArrayList<>();
     private List<Notification> notifications = new ArrayList<>();
     private List<AbstractCarte> equipements = new ArrayList<>();
     private Boolean isWin;
@@ -38,7 +39,11 @@ public class Joueur {
 
 
     public void initOptionsNewTurn() {
-        options.addAll(List.of(OptionEnum.SE_REVELER, OptionEnum.DEPLACER));
+        options.addAll(List.of(
+                OptionFactory.buildOption(OptionEnum.SE_REVELER),
+                OptionFactory.buildOption(OptionEnum.DEPLACER)
+        ));
+        // todo ajouter option si reveler pouvoir ou si item
     }
 
     public boolean isNotVunerableForetHante() {
@@ -53,7 +58,8 @@ public class Joueur {
             notifications.add(
                     NotificationFactory.buildNotification(
                             TypeNotificationEnum.INFORMATIF, idUtilisateur, String.format("le personnage %s est mort", cartePersonnage.getPersonnageEnum())));
-        };
+        }
+        ;
     }
 
     public void soigner(int nbPtSoin) {
@@ -65,12 +71,13 @@ public class Joueur {
     }
 
     public void transfertCarteEquipement(Joueur joueurCible, NomCarteEnum carteCible) {
-        if(isEquipmentExist(carteCible)){
+        if (isEquipmentExist(carteCible)) {
             equipements = equipements.stream().filter(abstractCarte -> !abstractCarte.getNomCarteEnum().equals(carteCible)).collect(Collectors.toList());
             joueurCible.equipements.add(CarteFactory.getCarte(carteCible));
         } else {
-            log.debug("on tente de donner/voler un equipement qui n'existe pas ! ",joueurCible,carteCible);
-        };
+            log.debug("on tente de donner/voler un equipement qui n'existe pas ! ", joueurCible, carteCible);
+        }
+        ;
 
 
     }
@@ -87,36 +94,39 @@ public class Joueur {
         equipements = equipements.stream().filter(abstractCarte -> !abstractCarte.getNomCarteEnum().equals(carteCible)).collect(Collectors.toList());
     }
 
-    public void attaque( Joueur joueurCible) {
-        if (joueurCible.getIdUtilisateur().equals(getIdUtilisateur())){
+    public void attaque(Partie partie, Joueur joueurCible) {
+        if (joueurCible.getIdUtilisateur().equals(getIdUtilisateur())) {
             // le joueur ne peux pas s'auto attaquer, meme avec la metraillette
             return;
         }
         int lancesDeDes;
-        if (isEquipmentExist(NomCarteEnum.SABRE_MASAMURE)){
+        if (isEquipmentExist(NomCarteEnum.SABRE_MASAMURE)) {
             lancesDeDes = DiceRollUtil.diceRoll(TypeDesEnum.DES_4);
         } else {
             lancesDeDes = DiceRollUtil.diceRoll(TypeDesEnum.DOUBLE_DES_6);
         }
         int degatsInfligeBrut = equipements.stream().filter(abstractCarte -> abstractCarte.getTypeEquipement() != null && abstractCarte.getTypeEquipement().getTypeEquipementEffectEnum().contains(TypeEquipementEffectEnum.EFFET_ATTAQUE))
-                .map(abstractCarte -> abstractCarte.getTypeEquipement().getDamagesEmitted(lancesDeDes)).reduce(0,Integer::sum);
+                .map(abstractCarte -> abstractCarte.getTypeEquipement().getDamagesEmitted(lancesDeDes)).reduce(0, Integer::sum);
         int degatRecu = joueurCible.degatRecu(degatsInfligeBrut);
 
-        manageCapaciteSpecial(degatRecu,joueurCible);
+        manageCapaciteSpecial(partie, degatRecu, joueurCible);
 
         joueurCible.blesse(degatRecu);
     }
 
-    private void manageCapaciteSpecial(int degatRecu, Joueur joueurCible) {
-        // TODO ajouter dans les personnages les options types vampire , si degat alors heal vampire
-
-
-        // TODO ajouter pour les personnages cible, les options type loup garou =>  si degat recu alors le loup garou peut attaquer
+    private void manageCapaciteSpecial(Partie partie, int degat, Joueur joueurCible) {
+        if (!cartePersonnage.getHidden()) {
+            cartePersonnage.usePower(this, joueurCible, partie, degat);
+        }
+        if (!joueurCible.getCartePersonnage().getHidden()) {
+            joueurCible.getCartePersonnage().usePower(joueurCible, joueurCible, partie, degat);
+        }
     }
 
-    private int degatRecu(int lanceDes){
+    private int degatRecu(int lanceDes) {
         return equipements.stream().filter(abstractCarte -> abstractCarte.getTypeEquipement() != null && abstractCarte.getTypeEquipement().getTypeEquipementEffectEnum().contains(TypeEquipementEffectEnum.EFFET_DEFENSE))
-                .map(abstractCarte -> abstractCarte.getTypeEquipement().getDamagesReceived(lanceDes)).reduce(0,Integer::sum);
+                .map(abstractCarte -> abstractCarte.getTypeEquipement().getDamagesReceived(lanceDes)).reduce(0, Integer::sum);
 
     }
+
 }

@@ -3,7 +3,9 @@ package com.project.shadowserver.shadowhunter.domain.gestionjeu.model;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.action.Action;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.carte.*;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.carte.equipement.TypeDesEnum;
+import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.option.Option;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.option.OptionEnum;
+import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.option.OptionFactory;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.CartePersonnageFactory;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.PersonnageEnum;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.terrain.CarteTerrainFactory;
@@ -29,9 +31,16 @@ public class Partie {
     private String idJoueurCreateur;
 
     private List<Joueur> joueurs = new ArrayList<>();
+
+    // permet a d'autres joueurs d'intervenir un moment ( exemple loup garou qui peut se defendre)
+    private List<Joueur> waitingJoueursAction = new ArrayList<>();
+
+    private EtatTourJoueur etatTourJoueur = EtatTourJoueur.NOUVEAU_TOUR;
+
     private Boolean isEnd;
     private List<TerrainAbstract> terrains = new ArrayList<>();
     private String idJoueurActuel;
+
     private List<AbstractCarte> carteShadows = new ArrayList<>();
     private List<AbstractCarte> carteLumiere = new ArrayList<>();
     private List<AbstractCarte> carteVision = new ArrayList<>();
@@ -82,7 +91,7 @@ public class Partie {
         return this; // TODO il faudrait une PartiePresentation, dependant de l'idJoueur et qui ne va afficher que les informations lié au joueurs
     }
 
-    public List<OptionEnum> getOptions(String idJoueur) {
+    public List<Option> getOptions(String idJoueur) {
         return getJoueur(idJoueur).getOptions().stream().collect(Collectors.toList());
     }
 
@@ -95,7 +104,6 @@ public class Partie {
         idJoueurActuel = idJoueur;
         var joueurActuel = getJoueur(idJoueur);
         joueurActuel.initOptionsNewTurn();
-        // TODO si il a deja la carte ange gardien alors elle doit etre defaussé
     }
 
     public void nextJoueurEnCours() {
@@ -133,7 +141,7 @@ public class Partie {
         int lancerDeDes = DiceRollUtil.diceRoll(TypeDesEnum.DOUBLE_DES_6);
         Joueur personnage = getJoueur(idJoueurEmeteur);
         if (lancerDeDes == 7) {
-            personnage.getOptions().add(OptionEnum.DEPLACER_VERS_TERRAIN);
+            personnage.getOptions().add(OptionFactory.buildOption(OptionEnum.DEPLACER_VERS_TERRAIN));
             personnage.getNotifications().add(
                     NotificationFactory.buildNotification(
                             TypeNotificationEnum.INFORMATIF,
@@ -164,10 +172,10 @@ public class Partie {
         Joueur joueurEmeteur = getJoueur(idJoueurEmeteur);
         if (joueurEmeteur.isEquipmentExist(NomCarteEnum.MITRAILLETTE_FUNESTE)) {
             var joueursCible = findJoueursAdjacent(terrainCible);
-            joueursCible.forEach(joueur -> joueurEmeteur.attaque(joueur));
+            joueursCible.forEach(joueur -> joueurEmeteur.attaque(this,joueur));
         }
         Joueur joueurCible = getJoueur(idJoueurCible);
-        joueurEmeteur.attaque(joueurCible);
+        joueurEmeteur.attaque(this,joueurCible);
 
 
         /* TODO a implementer

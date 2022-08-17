@@ -25,7 +25,8 @@ public enum OptionEnum {
     VOLER_CARTE_EQUIPEMENT("voler une carte equipement"),
     CHOISIR_CARTE_VISION("Choisir carte vision"),
     CHOISIR_CARTE_BLANCHE("Choisir carte blanche"),
-    CHOISIR_CARTE_TENEBRE("Choisir carte tenebre");
+    CHOISIR_CARTE_TENEBRE("Choisir carte tenebre"),
+    CONTRE_ATTAQUE("Vous contre attaquez");
 
     private final String label;
 

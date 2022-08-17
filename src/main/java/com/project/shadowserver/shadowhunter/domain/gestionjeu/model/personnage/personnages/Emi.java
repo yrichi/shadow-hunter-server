@@ -5,7 +5,6 @@ import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.Partie;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.CartePersonnageAbstract;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.PersonnageEnum;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.RoleEnum;
-import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.pouvoir.EmiPouvoir;
 
 public class Emi extends CartePersonnageAbstract {
 
@@ -13,13 +12,12 @@ public class Emi extends CartePersonnageAbstract {
         this.setPersonnageEnum(PersonnageEnum.EMI);
         this.setNombreDePointDeVie(10);
         this.setRole(RoleEnum.HUNTER);
-        this.setPouvoir(new EmiPouvoir());
     }
 
     @Override
-    public String usePower(Joueur joueurEmeteur, Joueur joueurCible, Partie partie) {
+    public void usePower(Joueur joueurEmeteur, Joueur joueurCible, Partie partie, int degat) {
         // TODO
-        return "";
+
     }
 
     ;

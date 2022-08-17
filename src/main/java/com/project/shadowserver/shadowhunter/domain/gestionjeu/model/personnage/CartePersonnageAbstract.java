@@ -4,8 +4,6 @@ import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.Joueur;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.Partie;
 import lombok.Data;
 
-import java.util.Date;
-
 @Data
 public abstract class CartePersonnageAbstract {
     PersonnageEnum personnageEnum;
@@ -13,7 +11,6 @@ public abstract class CartePersonnageAbstract {
     Boolean hidden;
     // permettra de gerer la carte vision supreme
     PersonnageEnum authorizedPersonnageSeeCard;
-    PouvoirAbstract pouvoir;
     int nombreDePointDeVie;
 
 
@@ -21,5 +18,6 @@ public abstract class CartePersonnageAbstract {
 
     public abstract boolean canUsePower();
 
-    public abstract String usePower(Joueur joueurEmeteur, Joueur joueurCible, Partie partie);
+    public abstract void usePower(Joueur joueurEmeteur, Joueur joueurCible, Partie partie, int degat);
+
 }

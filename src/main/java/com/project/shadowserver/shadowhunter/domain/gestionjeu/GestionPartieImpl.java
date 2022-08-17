@@ -2,14 +2,9 @@ package com.project.shadowserver.shadowhunter.domain.gestionjeu;
 
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.Partie;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.action.Action;
-import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.option.Option;
-import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.option.OptionFactory;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.provider.PartieProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,16 +29,12 @@ public class GestionPartieImpl implements GestionPartie {
         return partieSaved.getPartie(idJoueur);
     }
 
-    @Override
-    public List<Option> getOptionJoueurs(String idPartie, String idJoueur) {
-        return getPartie(idPartie, idJoueur).getOptions(idJoueur).stream().map(OptionFactory::buildOption).collect(Collectors.toList());
-    }
 
     @Override
     public Partie applyAction(String idPartie, String idJoueur, Action action) {
         Partie partie = partieProvider.getPartie(idPartie);
         partie.applyAction(action);
-        return partieProvider.savePartie(idPartie,partie);
+        return partieProvider.savePartie(idPartie, partie);
     }
 
     @Override

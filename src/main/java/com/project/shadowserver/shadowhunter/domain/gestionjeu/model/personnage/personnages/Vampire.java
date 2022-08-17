@@ -5,7 +5,6 @@ import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.Partie;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.CartePersonnageAbstract;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.PersonnageEnum;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.RoleEnum;
-import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.pouvoir.VampirePouvoir;
 
 public class Vampire extends CartePersonnageAbstract {
 
@@ -13,13 +12,11 @@ public class Vampire extends CartePersonnageAbstract {
         this.setPersonnageEnum(PersonnageEnum.VAMPIRE);
         this.setNombreDePointDeVie(13);
         this.setRole(RoleEnum.SHADOW);
-        this.setPouvoir(new VampirePouvoir());
     }
 
     @Override
-    public String usePower(Joueur joueurEmeteur, Joueur joueurCible, Partie partie) {
+    public void usePower(Joueur joueurEmeteur, Joueur joueurCible, Partie partie, int degat) {
         // TODO
-        return "";
     }
 
     ;

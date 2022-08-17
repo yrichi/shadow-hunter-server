@@ -11,7 +11,6 @@ public interface GestionPartie {
 
     Partie commencerPartie(String idPartie,String idJoueur);
 
-    List<Option> getOptionJoueurs(String idPartie,String idJoueur);
 
     Partie applyAction(String idPartie, String idJoueur, Action action);
 

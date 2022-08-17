@@ -5,7 +5,6 @@ import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.Partie;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.CartePersonnageAbstract;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.PersonnageEnum;
 import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.RoleEnum;
-import com.project.shadowserver.shadowhunter.domain.gestionjeu.model.personnage.pouvoir.AlliePouvoir;
 
 public class Allie extends CartePersonnageAbstract {
 
@@ -13,13 +12,11 @@ public class Allie extends CartePersonnageAbstract {
         this.setPersonnageEnum(PersonnageEnum.ALLIE);
         this.setNombreDePointDeVie(8);
         this.setRole(RoleEnum.NEUTRE);
-        this.setPouvoir(new AlliePouvoir());
     }
 
     @Override
-    public String usePower(Joueur joueurEmeteur, Joueur joueurCible, Partie partie) {
+    public void usePower(Joueur joueurEmeteur, Joueur joueurCible, Partie partie, int degat) {
         // TODO
-        return "";
     }
 
     ;
